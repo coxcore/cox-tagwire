@@ -1,0 +1,14 @@
+{
+    "globals": {
+
+    },
+    "curly": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "immed": true,
+    "indent": 4,
+    "noempty": true,
+    "jquery": true,
+    "wsh": true,
+    "browser": true
+}
