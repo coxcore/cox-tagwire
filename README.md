@@ -1,4 +1,4 @@
-[![TagWire Logo](https://raw.githubusercontent.com/coxcore/tagwire/master/src/img/tagwire_logo.png)](http://coxcore.com/tagwire/home/)
+[![TagWire Logo](https://raw.githubusercontent.com/coxcore/dev-tagwire/master/src/img/tagwire_logo.png)](http://coxcore.com/tagwire/home/)
 
 ## About TagWire
 
