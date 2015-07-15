@@ -1,7 +1,7 @@
 {
   "name": "TagWire",
   "description": "This library helps you on the data binds between Javascript object and HTML tags.",
-  "logo": "https://raw.githubusercontent.com/coxcore/tagwire/master/src/img/tagwire_logo.png",
+  "logo": "https://raw.githubusercontent.com/coxcore/cox-tagwire/master/src/img/tagwire_logo.png",
   "version": "1.0.3",
   "since": "2012.09",
   "language": "javascript",
@@ -28,10 +28,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/coxcore/tagwire.git"
+    "url": "git+https://github.com/coxcore/cox-tagwire.git"
   },
   "bugs": {
-    "url": "https://github.com/coxcore/tagwire/issues"
+    "url": "https://github.com/coxcore/cox-tagwire/issues"
   },
-  "homepage": "https://github.com/coxcore/tagiwre#readme"
+  "homepage": "https://github.com/coxcore/cox-tagiwre#readme"
 }
