@@ -82,6 +82,7 @@ module.exports = function(grunt) {
                 src: [
                     '<%= dir.src %>js/cox.js',
                     '<%= dir.src %>js/cox.ready.js',
+                    '<%= dir.src %>js/cox.css.js',
                     '<%= dir.src %>js/cox.TagWire.js',
                     '<%= dir.src %>js/jquery.TagWire.js'
                 ],

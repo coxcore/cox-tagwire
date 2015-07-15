@@ -553,29 +553,16 @@ function CoxTagWire() {
 
     // init
     (function() {
-        var css = [
+        var style = [
                 '  /* CSS for TagWire */  ',
                 '.' + H + A.tmp + ',',
                 '.' + H + A.cpt + ',',
                 '.' + H + A.hidn,
                 '{display:none;}  '
-            ].join(''),
-            head = document.head || document.getElementsByTagName('head')[0],
-            style = document.createElement('style');
+            ].join('');
 
-        style.setAttribute('type', 'text/css');
-
-        if (style.styleSheet) {
-            style.styleSheet.cssText = css;
-        } else {
-            style.appendChild(document.createTextNode(css));
-        }
-
-        head.appendChild(style);
-
-        cox.ready(function() {
-            initTmp(document);
-        });
+        cox.css(style);
+        cox.ready(initTmp);
     })();
 
 
