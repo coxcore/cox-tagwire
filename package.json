@@ -1,10 +1,11 @@
 {
   "name": "TagWire",
   "description": "This library helps you on the data binds between Javascript object and HTML tags.",
+  "logo": "https://raw.githubusercontent.com/coxcore/tagwire/master/src/img/tagwire_logo.png",
   "version": "1.0.3",
   "since": "2012.09",
+  "language": "javascript",
   "author": "Park U-yeong",
-  "logo": "https://raw.githubusercontent.com/coxcore/tagwire/master/src/img/tagwire_logo.png",
   "authorInfo": {
     "codename": "cox.ascript",
     "email": "ascript0@gmail.com"

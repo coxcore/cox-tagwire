@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     var pkg = grunt.file.readJSON('package.json');
 
     function getReplaceData(type) {
-        var arr = 'name description logo since update version license'.split(' ');
+        var arr = 'name description logo language since update version license'.split(' ');
         var o = {};
         var i, l, s;
 
