@@ -12,9 +12,9 @@
 
 
     // override tagwire tail
-    TagWire.setTail('data', function(t, v, c) {
+    TagWire.innerTail('data', function(t, v, c) {
         $(t).data(c, v);
-    });
+    }, true);
 
 
     // tagwire plugin

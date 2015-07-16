@@ -1,10 +1,10 @@
 /*!
-    Cox CSS
+    Cox css - coxcore.com
 
-    @package cox.style
+    @package cox.css
     @author cox.ascript
 */
-cox.css = cox.css || function(css) {
+cox.css = function(css) {
 
     var head = document.head || document.getElementsByTagName('head')[0],
         style = document.createElement('style');

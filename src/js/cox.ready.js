@@ -4,7 +4,7 @@
     @package cox.ready
     @author cox.ascript
 */
-cox.ready = cox.ready || function(fnc) {
+cox.ready = function(fnc) {
 
     var eventType,
         listener;
@@ -19,7 +19,7 @@ cox.ready = cox.ready || function(fnc) {
         fnc();
         return;
     }
-    
+
     if (document.addEventListener) {
         listener = function() {
             document.removeEventListener(eventType, listener, false);

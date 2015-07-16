@@ -3,11 +3,14 @@
 
     @package cox.TagWire
     @author cox.ascript
+    @require [
+        cox.namespace,
+        cox.ready,
+        cox.css
+    ]
 */
-cox.TagWire = cox.TagWire || (function() {
+cox.TagWire = (function() {
 
-
-function CoxTagWire() {
 
     // private property
     var G = 'global',
@@ -81,16 +84,39 @@ function CoxTagWire() {
             gt : /&gt;/g
         };
 
-    var _this = this,
-        fn = {},
+    var instance,
+        fn,
         tail = {},
         rx = {},
-        rxl = 0,
-        check = document.createElement('span'),
-        isTC = check.textContent === '',
-        isSG = T !== '-';
+        rxl = 0;
 
-    var findAll,
+    var _nitmCls = function(el) {
+            setCls(el, A.nw, false);
+            setCls(el, A.od, true);
+        },
+        _addTails = function(f, s) {
+            tail[s] = f;
+            return f;
+        },
+        _rmvTails = function(f, s) {
+            delete tail[s];
+            return f;
+        },
+        _afterShow = function(el) {
+            setCls(el, A.hidn, false);
+        },
+        _rmvHidn = function(el) {
+            if (hasCls(el, A.hidn)) {
+                _afterShow(el);
+            }
+
+            each(findEl(el, A.hidn), _afterShow);
+        };
+
+    var check = document.createElement('span'),
+        isTC = check.textContent === '',
+        isSG = T !== '-',
+        findAll,
         hasClass,
         setClass,
         hasCls,
@@ -100,12 +126,6 @@ function CoxTagWire() {
         lastEl,
         attrList,
         checkEl;
-
-    var _nitmCls,
-        _addTails,
-        _rmvTails,
-        _afterShow,
-        _rmvHidn;
 
 
     oeach(EV, function(v) {
@@ -123,7 +143,6 @@ function CoxTagWire() {
     (function() {
 
         var fsn;
-
 
         if (check.classList) {
 
@@ -151,13 +170,7 @@ function CoxTagWire() {
                 if (b) {
                     return t.className.indexOf(c) !== -1;
                 } else {
-                    reg = rx[c];
-
-                    if (!reg) {
-                        rxl++;
-                        reg = new RegExp('(?:^|\\s)' + c + '(?:\\s|$)');
-                        rx[c] = reg;
-                    }
+                    reg = rx[c] || rxReg(c, new RegExp('(?:^|\\s)' + c + '(?:\\s|$)'));
 
                     return reg.test(t.className);
                 }
@@ -168,13 +181,7 @@ function CoxTagWire() {
                     reg;
 
                 if (!b) {
-                    reg = rx[c];
-
-                    if (!reg) {
-                        rxl++;
-                        reg = new RegExp('(?:^|\\s+)' + c + '(?=\\s|$)');
-                        rx[c] = reg;
-                    }
+                    reg = rx[c] || rxReg(c, new RegExp('(?:^|\\s+)' + c + '(?=\\s|$)'));
 
                     t.className = cn.replace(reg, '').replace(RE.fe, '');
                 } else {
@@ -372,198 +379,6 @@ function CoxTagWire() {
 
     })();
     /* << CROSS BROWSING */
-
-
-    _nitmCls = function(el) {
-        setCls(el, A.nw, false);
-        setCls(el, A.od, true);
-    };
-
-    _addTails = function(f, s) {
-        tail[s] = f;
-        return f;
-    };
-
-    _rmvTails = function(f, s) {
-        delete tail[s];
-        return f;
-    };
-
-    _afterShow = function(el) {
-        setCls(el, A.hidn, false);
-    };
-
-    _rmvHidn = function(el) {
-        if (hasCls(el, A.hidn)) {
-            _afterShow(el);
-        }
-
-        each(findEl(el, A.hidn), _afterShow);
-    };
-
-
-    // public property
-    this.tail = tail;
-
-
-    // public function
-    this.render = function(t, o, c) {
-        var otp,
-            vo,
-            asc,
-            op,
-            os,
-            oo;
-
-        initTmp();
-
-        if (rxl > 500) {
-            rxl = 0;
-            rx = {};
-        }
-
-        otp = typeOf(o) === 'object';
-
-        if (!t || t.length === 0 || (!c && (!o || !otp))) {
-            return;
-        }
-
-        asc = false;
-        op = {
-            opt : {},
-            evcmp : []
-        };
-
-        switch(typeOf(c)) {
-            case 'boolean' :
-                asc = c;
-                c = A.rndr;
-                break;
-
-            case 'undefined' || 'null' || 'number' :
-                c = A.rndr;
-                break;
-
-            case 'object' :
-                asc = Boolean(c.async);
-
-                if (otp && c.select) {
-                    oo = o;
-                    o = {};
-
-                    each(c.select.split(' '), function(s) {
-                        os = oo[s];
-
-                        if (os !== undefined) {
-                            o[s] = os;
-                        }
-                    });
-                }
-
-                if (c.skip) {
-                    op.skipReg = new RegExp(c.skip.replace(/ +/g, '|'));
-                }
-
-                op.complete = c.complete;
-                op.ready = c.ready;
-                op.finish = c.finish;
-                c = c.varsName || A.rndr;
-                break;
-
-            default :
-        }
-
-        if (c === G) {
-            t = document.body;
-        }
-
-        if (!otp || c !== A.rndr) {
-            vo = {};
-            vo[c] = o;
-        } else {
-            vo = o;
-        }
-
-        op.asyncNum = 0;
-        op.event = {
-            target : t,
-            data : vo,
-            name : c,
-            type : EV.complete
-        };
-
-        if (asc) {
-            asyncRendering(t, vo, A.rndr, op);
-        } else {
-            rendering(t, vo, A.rndr, op);
-        }
-
-        afterShow(t);
-
-        return o;
-    };
-
-    this.callTail = function(fs, t, v, c) {
-        each(t, function(el) {
-            fcall(el, v, c, fs);
-        });
-    };
-
-    this.setTail = function(s, f) {
-        fn[s] = f;
-    };
-
-    this.addTails = function(o) {
-        oeach(o, _addTails);
-    };
-
-    this.removeTails = function(o) {
-        oeach(o, _rmvTails);
-    };
-
-    this.initTemplate = function(t) {
-        each(t, initTmp);
-    };
-
-    this.cloneNode = function(t) {
-        var tc = null;
-
-        each(t, function(el) {
-            tc = cloneNode(el);
-            return false;
-        });
-
-        return tc;
-    };
-
-    this.checkBoolean = getBln;
-
-    this.each = each;
-
-    this.oeach = oeach;
-
-    this.typeOf = typeOf;
-
-    this.isEmpty = isEmpty;
-
-    this.log = clog;
-
-    this.error = cerror;
-
-
-    // init
-    (function() {
-        var style = [
-                '  /* CSS for TagWire */  ',
-                '.' + H + A.tmp + ',',
-                '.' + H + A.cpt + ',',
-                '.' + H + A.hidn,
-                '{display:none;}  '
-            ].join('');
-
-        cox.css(style);
-        cox.ready(initTmp);
-    })();
 
 
     // private function
@@ -918,15 +733,10 @@ function CoxTagWire() {
     }
 
     function reValue(c) {
-        var v = rx[V.resf + c];
-
-        if (!v) {
-            rxl++;
-            v = new RegExp('(?:^|\\s)' + H + c + T + '(?!' + V.skip + '|' + EV.all + ')(\\S+)', 'g');
-            rx[V.resf + c] = v;
-        }
-
-        return v;
+        return rx[V.resf + c] || rxReg(
+                V.resf + c,
+                new RegExp('(?:^|\\s)' + H + c + T + '(?!' + V.skip + '|' + EV.all + ')(\\S+)', 'g')
+            );
     }
 
     function applyEvent(t, v, c, dt, ev, slf) {
@@ -967,15 +777,10 @@ function CoxTagWire() {
     }
 
     function reEvent(c) {
-        var v = rx[V.ree + c];
-
-        if (!v) {
-            rxl++;
-            v = new RegExp('(?:^|\\s)' + H + c + T + '(?!' + V.skip + ')(\\S+)', 'g');
-            rx[V.ree + c] = v;
-        }
-
-        return v;
+        return rx[V.ree + c] || rxReg(
+                V.ree + c,
+                new RegExp('(?:^|\\s)' + H + c + T + '(?!' + V.skip + ')(\\S+)', 'g')
+            );
     }
 
     function applyFinish(t, v, c, dt) {
@@ -1220,303 +1025,462 @@ function CoxTagWire() {
         return s;
     }
 
+    function rxReg(name, reg) {
+        return ++rxl && (rx[name] = reg);
+    }
+
+
+    // TagWire Instance
+    instance = {
+
+        // public property
+        tail: tail,
+
+
+        // public function
+        render: function (t, o, c) {
+            var otp,
+                vo,
+                asc,
+                op,
+                os,
+                oo;
+
+            initTmp();
+
+            if (rxl > 500) {
+                rxl = 0;
+                rx = {};
+            }
+
+            otp = typeOf(o) === 'object';
+
+            if (!t || t.length === 0 || (!c && (!o || !otp))) {
+                return;
+            }
+
+            asc = false;
+            op = {
+                opt: {},
+                evcmp: []
+            };
+
+            switch (typeOf(c)) {
+                case 'boolean' :
+                    asc = c;
+                    c = A.rndr;
+                    break;
+
+                case 'undefined' || 'null' || 'number' :
+                    c = A.rndr;
+                    break;
+
+                case 'object' :
+                    asc = Boolean(c.async);
+
+                    if (otp && c.select) {
+                        oo = o;
+                        o = {};
+
+                        each(c.select.split(' '), function (s) {
+                            os = oo[s];
+
+                            if (os !== undefined) {
+                                o[s] = os;
+                            }
+                        });
+                    }
+
+                    if (c.skip) {
+                        op.skipReg = new RegExp(c.skip.replace(/ +/g, '|'));
+                    }
+
+                    op.complete = c.complete;
+                    op.ready = c.ready;
+                    op.finish = c.finish;
+                    c = c.varsName || A.rndr;
+                    break;
+
+                default :
+            }
+
+            if (c === G) {
+                t = document.body;
+            }
+
+            if (!otp || c !== A.rndr) {
+                vo = {};
+                vo[c] = o;
+            } else {
+                vo = o;
+            }
+
+            op.asyncNum = 0;
+            op.event = {
+                target: t,
+                data: vo,
+                name: c,
+                type: EV.complete
+            };
+
+            if (asc) {
+                asyncRendering(t, vo, A.rndr, op);
+            } else {
+                rendering(t, vo, A.rndr, op);
+            }
+
+            afterShow(t);
+
+            return o;
+        },
+
+        callTail: function (fs, t, v, c) {
+            each(t, function (el) {
+                fcall(el, v, c, fs);
+            });
+        },
+
+        innerTail: function (s, f, b) {
+            if (!b && typeof fn[s] === 'function') {
+                throw(new Error('[TagWire.innerTail] "' + s + '" is already in use.'));
+            } else {
+                fn[s] = f;
+            }
+        },
+
+        addTails: function (o) {
+            oeach(o, _addTails);
+        },
+
+        removeTails: function (o) {
+            oeach(o, _rmvTails);
+        },
+
+        initTemplate: function (t) {
+            each(t, initTmp);
+        },
+
+        cloneNode: function (t) {
+            var tc = null;
+
+            each(t, function (el) {
+                tc = cloneNode(el);
+                return false;
+            });
+
+            return tc;
+        },
+
+        checkBoolean: getBln,
+        each: each,
+        oeach: oeach,
+        typeOf: typeOf,
+        isEmpty: isEmpty,
+        log: clog,
+        error: cerror
+
+    };
+
 
 
     // private tail
-    fn.attr = function(t, v, c) {
-        var s,
-            r,
-            pv;
+    fn = {
 
-        if (typeof c !== 'string' || isEmpty(v)) {
-            return;
-        }
+        attr: function(t, v, c) {
+            var s,
+                r,
+                pv;
 
-        s = '#' + c + '#';
-        r = rx[V.rep + c];
-
-        if (!r) {
-            rxl++;
-            r = new RegExp(s, 'g');
-            rx[V.rep + c] = r;
-        }
-
-        each(attrList(t), function(p) {
-            p = p.name;
-            pv = t.getAttribute(p);
-
-            if (typeof pv === 'string' && pv.indexOf(s) !== -1) {
-                t.setAttribute(p, pv.replace(r, v));
-            }
-        });
-    };
-
-
-    fn.insert = function(t, v, c) {
-        var s,
-            r,
-            tv,
-            sv;
-
-        if (typeof c !== 'string' || isEmpty(v)) {
-            return;
-        }
-
-        s = '#' + c + '#';
-        r = rx[V.rep + c];
-
-        if (!r) {
-            rxl++;
-            r = new RegExp(s, 'g');
-            rx[V.rep + c] = r;
-        }
-
-        check.innerHTML = v;
-        sv = check.innerHTML.
-            replace(RE.amp, '&').
-            replace(RE.lt, '<').
-            replace(RE.gt, '>');
-        check.innerHTML = '';
-
-        each(t.childNodes, function (el) {
-            if (el.nodeName === '#text') {
-                tv = el.nodeValue;
-
-                if (tv.indexOf(s) !== -1) {
-                    el.nodeValue = tv.replace(r, sv);
-                }
-            }
-        });
-    };
-
-
-    fn.replace = function(t, v, c) {
-        var s,
-            r;
-
-        if (typeof c !== 'string' || isEmpty(v)) {
-            return;
-        }
-
-        s = '#' + c + '#';
-        r = rx[V.rep + c];
-
-        if (!r) {
-            rxl++;
-            r = new RegExp(s, 'g');
-            rx[V.rep + c] = r;
-        }
-
-        t.innerHTML = t.innerHTML.replace(r, v);
-    };
-
-
-    fn.text = isTC ?
-        function(t, v) {
-            if (!isEmpty(v)) {
-                t.textContent = v;
-            }
-        }:
-        function(t, v) {
-            if (!isEmpty(v)) {
-                t.innerText = v;
-            }
-        };
-
-
-    fn.html = function (t, v) {
-        if (!isEmpty(v)) {
-            t.innerHTML = v;
-        }
-    };
-
-
-    fn.val = function(t, v) {
-        if (!isEmpty(v)) {
-            t.value = v;
-        }
-    };
-
-
-    fn.data = function(t, v, c) {
-        if (typeof c === 'string' && !isEmpty(v)) {
-            t.setAttribute('data-' + c, v);
-        }
-    };
-
-
-    fn.dt = function(t, v, c) {
-        if (typeof c === 'string' && !isEmpty(v)) {
-            if (!t.attrData) {
-                t.attrData = {};
+            if (typeof c !== 'string' || isEmpty(v)) {
+                return;
             }
 
-            t.attrData[c] = v;
-        }
-    };
+            s = '#' + c + '#';
+            r = rx[V.rep + c] || rxReg(V.rep + c, new RegExp(s, 'g'));
 
-
-    fn.show = function(t, v) {
-        t.style.display = getBln(v) ? '' : 'none';
-    };
-
-
-    fn.hide = function(t, v) {
-        fn.show(t, !getBln(v));
-    };
-
-
-    fn.keep = function(t, v) {
-        if (!getBln(v)) {
-            if (t.parentNode) {
-                t.parentNode.removeChild(t);
-            } else {
-                t.innerHTML = '';
-                t._remove = true;
-            }
-        }
-    };
-
-
-    fn.remove = function(t, v) {
-        fn.keep(t, !getBln(v));
-    };
-
-
-    fn.setClass = function(t, v, c) {
-        setClass(t, c, getBln(v));
-    };
-
-
-    fn._setClass = function(t, v, c) {
-        setClass(t, c, !getBln(v));
-    };
-
-
-    fn.addClass = function(t, v) {
-        if(typeof v === 'string') {
-            setClass(t, v, true);
-        }
-    };
-
-
-    fn.removeClass = function(t, v) {
-        if(typeof v === 'string') {
-            setClass(t, v, false);
-        }
-    };
-
-
-    fn.restore = function(t, v) {
-        var scr = t.previousSibling;
-
-        if (scr && scr.type === V.scc && getBln(v)) {
-            t.parentNode.replaceChild(cloneNode(scr._tw_template), t);
-        }
-    };
-
-
-    fn._restore = function(t, v) {
-        fn.restore(t, !getBln(v));
-    };
-
-
-    fn.restoreAttr = function(t, v) {
-        var scr = t.previousSibling,
-            tag;
-
-        if (scr && scr.type === V.scc && getBln(v)) {
-            tag = scr._tw_template;
-
-            each(attrList(tag), function(p) {
+            each(attrList(t), function(p) {
                 p = p.name;
-                t.setAttribute(p, tag.getAttribute(p));
-            });
-        }
-    };
+                pv = t.getAttribute(p);
 
-
-    fn._restoreAttr = function(t, v) {
-        fn.restoreAttr(t, !getBln(v));
-    };
-
-
-    fn.restoreText = function(t, v) {
-        var scr = t.previousSibling,
-            arr,
-            id;
-
-        if (scr && scr.type === V.scc && getBln(v)) {
-            arr = [];
-            id = 0;
-
-            each(t.childNodes, function(el) {
-                if (el.nodeName === '#text') {
-                    arr.push(el);
+                if (typeof pv === 'string' && pv.indexOf(s) !== -1) {
+                    t.setAttribute(p, pv.replace(r, v));
                 }
             });
+        },
 
-            each(scr._tw_template.childNodes, function (el) {
-                if (el.nodeName === '#text') {
-                    arr[id++].nodeValue = el.nodeValue;
-                }
-            });
-        }
-    };
+        insert: function(t, v, c) {
+            var s,
+                r,
+                tv,
+                sv;
 
-
-    fn._restoreText = function(t, v) {
-        fn.restoreText(t, !getBln(v));
-    };
-
-
-    fn.restoreHtml = function(t, v) {
-        var scr = t.previousSibling;
-
-        if (scr && scr.type === V.scc && getBln(v)) {
-            t.innerHTML = scr._tw_template.innerHTML;
-        }
-    };
-
-
-    fn._restoreHtml = function(t, v) {
-        fn.restoreHtml(t, !getBln(v));
-    };
-
-
-    fn.restoreChild = function(t, v) {
-        var tag,
-            chk,
-            bln = getBln(v);
-
-        each(childEl(t, V.scc), function(sc) {
-            tag = sc.nextSibling;
-            chk = !tag || !hasCls(tag, A.cln);
-
-            if (chk && bln) {
-                sc.parentNode.insertBefore(cloneNode(sc._tw_template), sc.nextSibling);
+            if (typeof c !== 'string' || isEmpty(v)) {
+                return;
             }
-        });
+
+            s = '#' + c + '#';
+            r = rx[V.rep + c] || rxReg(V.rep + c, new RegExp(s, 'g'));
+
+            check.innerHTML = v;
+            sv = check.innerHTML.
+                replace(RE.amp, '&').
+                replace(RE.lt, '<').
+                replace(RE.gt, '>');
+            check.innerHTML = '';
+
+            each(t.childNodes, function (el) {
+                if (el.nodeName === '#text') {
+                    tv = el.nodeValue;
+
+                    if (tv.indexOf(s) !== -1) {
+                        el.nodeValue = tv.replace(r, sv);
+                    }
+                }
+            });
+        },
+
+
+        replace: function(t, v, c) {
+            var s,
+                r;
+
+            if (typeof c !== 'string' || isEmpty(v)) {
+                return;
+            }
+
+            s = '#' + c + '#';
+            r = rx[V.rep + c] || rxReg(V.rep + c, new RegExp(s, 'g'));
+
+            t.innerHTML = t.innerHTML.replace(r, v);
+        },
+
+
+        text: isTC ?
+            function(t, v) {
+                if (!isEmpty(v)) {
+                    t.textContent = v;
+                }
+            }:
+            function(t, v) {
+                if (!isEmpty(v)) {
+                    t.innerText = v;
+                }
+            },
+
+
+        html: function (t, v) {
+            if (!isEmpty(v)) {
+                t.innerHTML = v;
+            }
+        },
+
+
+        val: function(t, v) {
+            if (!isEmpty(v)) {
+                t.value = v;
+            }
+        },
+
+
+        data: function(t, v, c) {
+            if (typeof c === 'string' && !isEmpty(v)) {
+                t.setAttribute('data-' + c, v);
+            }
+        },
+
+
+        dt: function(t, v, c) {
+            if (typeof c === 'string' && !isEmpty(v)) {
+                if (!t.attrData) {
+                    t.attrData = {};
+                }
+
+                t.attrData[c] = v;
+            }
+        },
+
+
+        show: function(t, v) {
+            t.style.display = getBln(v) ? '' : 'none';
+        },
+
+
+        hide: function(t, v) {
+            fn.show(t, !getBln(v));
+        },
+
+
+        keep: function(t, v) {
+            if (!getBln(v)) {
+                if (t.parentNode) {
+                    t.parentNode.removeChild(t);
+                } else {
+                    t.innerHTML = '';
+                    t._remove = true;
+                }
+            }
+        },
+
+
+        remove: function(t, v) {
+            fn.keep(t, !getBln(v));
+        },
+
+
+        setClass: function(t, v, c) {
+            setClass(t, c, getBln(v));
+        },
+
+
+        _setClass: function(t, v, c) {
+            setClass(t, c, !getBln(v));
+        },
+
+
+        addClass: function(t, v) {
+            if(typeof v === 'string') {
+                setClass(t, v, true);
+            }
+        },
+
+
+        removeClass: function(t, v) {
+            if(typeof v === 'string') {
+                setClass(t, v, false);
+            }
+        },
+
+
+        restore: function(t, v) {
+            var scr = t.previousSibling;
+
+            if (scr && scr.type === V.scc && getBln(v)) {
+                t.parentNode.replaceChild(cloneNode(scr._tw_template), t);
+            }
+        },
+
+
+        _restore: function(t, v) {
+            fn.restore(t, !getBln(v));
+        },
+
+
+        restoreAttr: function(t, v) {
+            var scr = t.previousSibling,
+                tag;
+
+            if (scr && scr.type === V.scc && getBln(v)) {
+                tag = scr._tw_template;
+
+                each(attrList(tag), function(p) {
+                    p = p.name;
+                    t.setAttribute(p, tag.getAttribute(p));
+                });
+            }
+        },
+
+
+        _restoreAttr: function(t, v) {
+            fn.restoreAttr(t, !getBln(v));
+        },
+
+
+        restoreText: function(t, v) {
+            var scr = t.previousSibling,
+                arr,
+                id;
+
+            if (scr && scr.type === V.scc && getBln(v)) {
+                arr = [];
+                id = 0;
+
+                each(t.childNodes, function(el) {
+                    if (el.nodeName === '#text') {
+                        arr.push(el);
+                    }
+                });
+
+                each(scr._tw_template.childNodes, function (el) {
+                    if (el.nodeName === '#text') {
+                        arr[id++].nodeValue = el.nodeValue;
+                    }
+                });
+            }
+        },
+
+
+        _restoreText: function(t, v) {
+            fn.restoreText(t, !getBln(v));
+        },
+
+
+        restoreHtml: function(t, v) {
+            var scr = t.previousSibling;
+
+            if (scr && scr.type === V.scc && getBln(v)) {
+                t.innerHTML = scr._tw_template.innerHTML;
+            }
+        },
+
+
+        _restoreHtml: function(t, v) {
+            fn.restoreHtml(t, !getBln(v));
+        },
+
+
+        restoreChild: function(t, v) {
+            var tag,
+                chk,
+                bln = getBln(v);
+
+            each(childEl(t, V.scc), function(sc) {
+                tag = sc.nextSibling;
+                chk = !tag || !hasCls(tag, A.cln);
+
+                if (chk && bln) {
+                    sc.parentNode.insertBefore(cloneNode(sc._tw_template), sc.nextSibling);
+                }
+            });
+        },
+
+
+        _restoreChild: function(t, v) {
+            fn.restoreChild(t, !getBln(v));
+        },
+
+
+        render: function(t, v) {
+            instance.render(t, v);
+            return false;
+        },
+
+
+        log: function(t, v, c) {
+            clog('[TagWire:' + H + c + T + 'log]', '\n - target :', t, '\n - value :' , v);
+        }
+
+
     };
 
 
-    fn._restoreChild = function(t, v) {
-        fn.restoreChild(t, !getBln(v));
-    };
+    // init
+    (function() {
+        var style = [
+            '  /* CSS for TagWire */  ',
+                '.' + H + A.tmp + ',',
+                '.' + H + A.cpt + ',',
+                '.' + H + A.hidn,
+            '{display:none;}  '
+        ].join('');
+
+        cox.css(style);
+        cox.ready(initTmp);
+
+        window.TagWire = window.TagWire || instance;
+    })();
 
 
-    fn.render = function(t, v) {
-        _this.render(t, v);
-        return false;
-    };
+    return instance;
 
 
-    fn.log = function(t, v, c) {
-        clog('[TagWire:' + H + c + T + 'log]', '\n - target :', t, '\n - value :' , v);
-    };
-
-} // end of CoxTagWire
-
-
-return new CoxTagWire(); })();
-window.TagWire = window.TagWire || cox.TagWire;
+})();
