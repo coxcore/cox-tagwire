@@ -16,7 +16,6 @@ class="_{variable name}-{tail function}"
 * ***`{tail function}`*** : 데이터를 사용할 속성 혹은 사용자 정의 함수입니다. *Tail Function* 이라고 부릅니다.
 
 추가정보
-* Homepage : http://coxcore.com/tagwire/
 * Documentation : http://coxcore.com/tagwire/doc/
 
 ## How to Use?
