@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         dir: {
             src: 'src/',
             demo: 'demo/',
-            build: 'build/cox.tagwire-<%= pkg.version %>/',
+            release: '../release-tagwire/',
             dist: 'dist/'
         },
 
@@ -59,9 +59,8 @@ module.exports = function(grunt) {
             options: {
                 banner: [
                     '<%= banner %>\n',
-                    '(function(cox){',
-                    '"use strict";',
-                    '// closure >>>>\n\n',
+                    '(function(){',
+                    '"use strict";\n',
                     '// module\n'
                 ].join('\n'),
 
@@ -72,8 +71,7 @@ module.exports = function(grunt) {
 
                 footer: [
                     '\n// end of module\n\n',
-                    '// <<<< closure',
-                    '})(window.<%= pkg.namespace %> || (window.<%= pkg.namespace %>={}));\n'
+                    '})();\n'
                 ].join('\n'),
 
                 stripBanners: {
@@ -84,6 +82,7 @@ module.exports = function(grunt) {
 
             basic: {
                 src: [
+                    '<%= dir.src %>js/cox.namespace.js',
                     '<%= dir.src %>js/cox.ready.js',
                     '<%= dir.src %>js/cox.css.js',
                     '<%= dir.src %>js/cox.TagWire.js',
@@ -132,20 +131,22 @@ module.exports = function(grunt) {
             }
         },
 
+        clean: ['<%= dir.dist %>**'],
+
         copy: {
             main: {
                 expand: true,
                 flatten: true,
                 filter: 'isFile',
                 src: '<%= dir.dist %>js/*',
-                dest: '<%= dir.build %>js/'
+                dest: '<%= dir.release %>js/'
             },
             demo:{
                 expand: true,
                 flatten: true,
                 filter: 'isFile',
                 src: '<%= dir.dist %><%= dir.demo %>*',
-                dest: '<%= dir.build %><%= dir.demo %>'
+                dest: '<%= dir.release %><%= dir.demo %>'
             }
         }
     });
@@ -168,6 +169,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('build', [
+        'clean',
         'default',
         'demo'
     ]);

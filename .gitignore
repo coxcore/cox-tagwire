@@ -130,6 +130,6 @@ node_modules
 Icon
 
 # TagWire
-build
+release
 dist
 src/demo
