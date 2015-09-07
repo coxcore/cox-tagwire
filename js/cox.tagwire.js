@@ -1,14 +1,82 @@
 /*!
-    TagWire Core - coxcore.com
+ *  TagWire 1.0.3 - coxcore.com
+ *
+ *  This library helps you on the data binds between Javascript object and HTML tags.
+ *
+ *  @author  Park U-yeong / cox.ascript
+ *  @email   ascript0@gmail.com
+ *  @update  2015.09.08 (since 2012.09)
+ *  @license MIT
+ */
 
-    @package cox.TagWire
-    @author cox.ascript
-    @require [
-        cox.namespace,
-        cox.ready,
-        cox.css
-    ]
-*/
+(function(){
+"use strict";
+
+// module
+var cox = window.cox || (window.cox = {});
+// end of module
+
+
+// module
+cox.ready = function(fnc) {
+
+    var eventType,
+        listener;
+
+    if (typeof fnc !== 'function') {
+        return;
+    }
+
+    eventType = 'readystatechange';
+
+    if (document.readyState === 'complete') {
+        fnc();
+        return;
+    }
+
+    if (document.addEventListener) {
+        listener = function() {
+            document.removeEventListener(eventType, listener, false);
+            fnc();
+        };
+
+        document.addEventListener(eventType, listener, false);
+    } else if (document.attachEvent) {
+        eventType = 'on' + eventType;
+
+        listener = function() {
+            document.detachEvent(eventType, listener);
+            fnc();
+        };
+
+        document.attachEvent(eventType, listener);
+    }
+
+};
+// end of module
+
+
+// module
+cox.css = function(css) {
+
+    var head = document.head || document.getElementsByTagName('head')[0],
+        style = document.createElement('style');
+
+    style.setAttribute('type', 'text/css');
+
+    if (style.styleSheet) {
+        style.styleSheet.cssText = css;
+    } else {
+        style.appendChild(document.createTextNode(css));
+    }
+
+    head.appendChild(style);
+
+};
+// end of module
+
+
+// module
 cox.TagWire = (function() {
 
 
@@ -1503,6 +1571,114 @@ cox.TagWire = (function() {
 
 
     return instance;
+
+
+})();
+// end of module
+
+
+// module
+(function plugin() {
+
+    var TagWire = window.TagWire;
+    var $ = window.jQuery;
+
+
+    if (!TagWire) {
+        return;
+    }
+
+    if (!$) {
+        TagWire.plugin('jQuery', plugin);
+        return false;
+    } else {
+        TagWire.plugin('jQuery', true);
+    }
+
+
+    // override tagwire tail
+    TagWire.innerTail('data', function(t, v, c) {
+        $(t).data(c, v);
+    }, true);
+
+
+    // tagwire plugin
+    $.fn.tagwire = function(v, o) {
+        TagWire.render(this, v, o);
+        return this;
+    };
+
+
+    // extra plugins
+    addPlugin('render', $.fn.tagwire);
+
+    addPlugin('callTail', function(fn, v, c) {
+        TagWire.callTail(this, fn, v, c);
+        return this;
+    });
+
+    addPlugin('initTemplate', function() {
+        TagWire.initTemplate(this);
+        return this;
+    });
+
+    addPlugin('copyNode', function() {
+        return $(TagWire.cloneNode(this));
+    });
+
+    addPlugin('loadAndRender', function(u, o) {
+        var $this = this,
+            ax,
+            fn,
+            efn;
+
+        ax = {
+            dataType : 'json',
+            success : function(v) {
+                if (typeof fn === 'function') {
+                    fn(v);
+                }
+
+                TagWire.render($this, v, o);
+            },
+            error : function(e) {
+                if (typeof efn === 'function') {
+                    efn(e);
+                }
+
+                TagWire.error(
+                    '[TagWire:loadAndRender]  JSON Parse Error : "' + ax.url + '"\n\n',
+                    e.responseText
+                );
+            }
+        };
+
+        if (typeof u === 'string') {
+            ax.url = u;
+        } else {
+            fn = u.success;
+            efn = u.error;
+            ax = $.extend({}, u, ax);
+        }
+
+        $.ajax(ax);
+
+        return this;
+    });
+
+
+    function addPlugin(name, fnc) {
+        var jfn = $.fn;
+
+        if (jfn[name] === undefined) {
+            jfn[name] = fnc;
+        }
+    }
+
+    return true;
+
+})();
+// end of module
 
 
 })();
