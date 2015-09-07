@@ -4,10 +4,21 @@
     @package jquery.TagWire
     @author cox.ascript
 */
-(function($, TagWire) {
+(function plugin() {
 
-    if (!$ || !TagWire) {
+    var TagWire = window.TagWire;
+    var $ = window.jQuery;
+
+
+    if (!TagWire) {
         return;
+    }
+
+    if (!$) {
+        TagWire.plugin('jQuery', plugin);
+        return false;
+    } else {
+        TagWire.plugin('jQuery', true);
     }
 
 
@@ -90,4 +101,6 @@
         }
     }
 
-})(window.jQuery, window.TagWire);
+    return true;
+
+})();

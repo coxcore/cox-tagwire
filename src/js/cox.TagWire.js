@@ -86,6 +86,7 @@ cox.TagWire = (function() {
 
     var instance,
         fn,
+        plugins = {},
         tail = {},
         rx = {},
         rxl = 0;
@@ -349,10 +350,10 @@ cox.TagWire = (function() {
                     s = t.cloneNode().outerHTML;
 
                 s.replace(RE.attl, function(o, s) {
-                    var ab = t.getAttributeNode(s);
+                    var ab = t.getAttributeNode(s).nodeValue;
 
                     if (typeof ab !== 'object') {
-                        b.push(ab);
+                        b.push(s);
                     }
 
                     return o;
@@ -1038,7 +1039,7 @@ cox.TagWire = (function() {
 
 
         // public function
-        render: function (t, o, c) {
+        render: function(t, o, c) {
             var otp,
                 vo,
                 asc,
@@ -1134,13 +1135,13 @@ cox.TagWire = (function() {
             return o;
         },
 
-        callTail: function (fs, t, v, c) {
+        callTail: function(fs, t, v, c) {
             each(t, function (el) {
                 fcall(el, v, c, fs);
             });
         },
 
-        innerTail: function (s, f, b) {
+        innerTail: function(s, f, b) {
             if (!b && typeof fn[s] === 'function') {
                 throw(new Error('[TagWire.innerTail] "' + s + '" is already in use.'));
             } else {
@@ -1148,27 +1149,48 @@ cox.TagWire = (function() {
             }
         },
 
-        addTails: function (o) {
+        addTails: function(o) {
             oeach(o, _addTails);
         },
 
-        removeTails: function (o) {
+        removeTails: function(o) {
             oeach(o, _rmvTails);
         },
 
-        initTemplate: function (t) {
+        initTemplate: function(t) {
             each(t, initTmp);
         },
 
-        cloneNode: function (t) {
+        cloneNode: function(t) {
             var tc = null;
 
-            each(t, function (el) {
+            each(t, function(el) {
                 tc = cloneNode(el);
                 return false;
             });
 
             return tc;
+        },
+
+        plugin: function(name, fnc) {
+            var type = typeof fnc;
+
+            if (!name && name !== 'string') {
+                return false;
+            }
+
+            if (type === 'boolean' && fnc) {
+                plugins[name] = true;
+                return true;
+            }
+
+            if (type === 'function') {
+                plugins[name] = fnc;
+                return false;
+            } else {
+                fnc = plugins[name];
+                return fnc === true || typeof fnc === 'function' && fnc();
+            }
         },
 
         checkBoolean: getBln,
@@ -1199,7 +1221,7 @@ cox.TagWire = (function() {
             r = rx[V.rep + c] || rxReg(V.rep + c, new RegExp(s, 'g'));
 
             each(attrList(t), function(p) {
-                p = p.name;
+                p = p.name || p;
                 pv = t.getAttribute(p);
 
                 if (typeof pv === 'string' && pv.indexOf(s) !== -1) {
