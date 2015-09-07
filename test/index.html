@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8" />
+<title>TagWire Demo</title>
+<style type="text/css">
+    body { font: 15px Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+    pre { word-break: break-all; }
+    h2 { padding-top: 20px; }
+
+    #header { border-bottom: 1px solid #ccc; }
+    #contents { padding: 10px 20px 20px; }
+    #result { border: 1px solid #aaa; margin-bottom:-10px; }
+    #result ul li { padding: 2px 10px; color:#f00; }
+    #result li.noProblem { color:#333; }
+    #testcode div pre { margin:0; padding: 10px; background: #f4f4f4;}
+    #testcode div div.code { margin:0 0 20px; padding: 10px; border: 1px solid #ccc; background: #f4f4f4; color: #333; line-height: 1.3em; }
+    #footer { padding:10px; border-top: 1px solid #ccc; text-align: center; font-weight:bold; }
+
+    .title { margin-top: 20px; margin-bottom: 4px; font-size: 1.1em; font-weight:700; }
+    .errorElement, #testcode div div.errorElement { border: 1px solid #f00; background: #ffcccc; }
+    #testcode div div.errorElement { display: inline; padding: 1px; margin: 0; }
+    .info { color: #888; font-size: 0.94em; }
+</style>
+<style type="text/css">
+    .c-tag { font-weight:700; color:#ee8855 }
+    .c-param { color:#5555aa; }
+    .c-value { color:#228855; }
+    .c-script { color:#885555; }
+    .c-temp { color:#bbbbbb; }
+</style>
+
+<!-- cox.TagWire package -->
+<script type="text/javascript" src="../src/js/cox.namespace.js"></script>
+<script type="text/javascript" src="../src/js/cox.ready.js"></script>
+<script type="text/javascript" src="../src/js/cox.css.js"></script>
+<script type="text/javascript" src="../src/js/cox.TagWire.js"></script>
+<script type="text/javascript" src="../src/js/jquery.TagWire.js"></script>
+<!-- /cox.TagWire package -->
+
+<!-- TagWire보다 늦게 include 하면 jQuery 없는 환경으로 TagWire 테스트 -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+</head>
+
+
+<body>
+
+<div id="container" class="_package _hidden">
+<div id="header">
+<h1><span class="_group-text"></span> Project</h1>
+</div>
+<div id="contents">
+
+<h2>Test Result</h2>
+<div id="result">
+<ul class="error _errors _errors-list">
+    <li class="_template _item-html"></li>
+    <li class="_errors-hide noProblem">No Problem</li>
+</ul>
+</div>
+<p class="info">Support : IE5+, Chrome, Firefox, Safari, Opera</p>
+
+<!-- testcode -->
+<div id="testcode" class="_render-ready-showTag _render-complete-showTag">
+
+
+
+
+<div class="section"><!-- section -->
+<h2 data-ref="title">_variable-attribute</h2>
+
+
+<pre data-ref="tag">
+<a class="_project-title _website-href"> a 태그의 'href'와 'title' 속성이 적용된다. </a>
+
+<span class="_project-custom"> 'custom' 은 표준 속성이 아니므로 적용되지 않는다. </span>
+<span class="_project-custom" custom=""> 비표준 속성이어도 미리 선언해두면 적용된다. </span>
+
+<a class="_website-href-title-custom" custom=""> tail 함수는 연달아 쓸 수 있다. </a>
+
+<span class="_website-data">
+data 속성은 'data-변수명'으로 설정된다.
+jQuery plugin 모드인 경우는 data('변수명') 로 설정되어 속성에 보이지 않는다.
+</span>
+<span class="_website-data-homepage">
+'_변수명-data-이름' 형태로 설정하면, 'data-이름' 속성으로 설정된다.
+jQuery plugin 모드인 경우는 data('이름') 로 설정된다.
+</span>
+
+<input type="text" class="_project-value" />
+input 에 'value' 설정
+<input type="text" class="_project-val" />
+'-val' 도 동일한 기능을 하지만 'value'에 표시되지 않는다.(IE8 이하는 표시됨)
+
+<input type="checkbox" class="_project-checked" />
+<input type="radio" class="_project-checked" />
+checkbox, radio 등 'checked' 처리
+</pre>
+
+
+<p class="title">[Before]</p>
+<div class="code" data-ref="before"></div>
+
+<p class="title">[After]</p>
+<div class="code" data-ref="after"></div>
+<!-- /section --></div>
+
+
+
+
+<div class="section"><!-- section -->
+<h2 data-ref="title">_variable-text</h2>
+
+
+<pre data-ref="tag">
+<p class="_description-text">description 값 출력</p>
+<p class="_spacialChar-text">spacialChar 값 출력</p>
+<p class="_htmlStr-text">htmlStr 값 출력</p>
+<span>지금 하고 있는 것은 <span class="_project-text">project 값 출력</span>입니다.</span>
+</pre>
+
+
+<p class="title">[Before]</p>
+<div class="code" data-ref="before"></div>
+
+<p class="title">[After]</p>
+<div class="code" data-ref="after"></div>
+<!-- /section --></div>
+
+
+
+
+<div class="section"><!-- section -->
+<h2 data-ref="title">_variable-html</h2>
+
+
+<pre data-ref="tag">
+<p class="_htmlStr-html">htmlStr 값 출력</p>
+<p class="_spacialChar-html">spacialChar 값 출력</p>
+</pre>
+
+
+<p class="title">[Before]</p>
+<div class="code" data-ref="before"></div>
+
+<p class="title">[After]</p>
+<div class="code" data-ref="after"></div>
+<!-- /section --></div>
+
+
+
+
+<div class="section"><!-- section -->
+<h2 data-ref="title">_variable-attr</h2>
+
+
+<pre data-ref="tag">
+<span id="#group#" class="_group-attr">group 값을 id 속성에 설정</span>
+<span title="#group# #project#" class="_group-attr _project-attr">group 값과 project 값을 title 속성에 설정</span>
+</pre>
+
+
+<p class="title">[Before]</p>
+<div class="code" data-ref="before"></div>
+
+<p class="title">[After]</p>
+<div class="code" data-ref="after"></div>
+<!-- /section --></div>
+
+
+
+
+<div class="section"><!-- section -->
+<h2 data-ref="title">_variable-replace</h2>
+
+
+<pre data-ref="tag">
+<span class="_group-insert">group 값 '#group#' 출력 <span>#group#</span> 자식 엘리먼트는 미적용</span>
+<span class="_group-replace">group 값 '#group#' 출력 <span>#group#</span> 자식 엘리먼트도 적용</span>
+</pre>
+
+
+<p class="title">[Before]</p>
+<div class="code" data-ref="before"></div>
+
+<p class="title">[After]</p>
+<div class="code" data-ref="after"></div>
+<!-- /section --></div>
+
+
+
+
+<div class="section"><!-- section -->
+<h2 data-ref="title">_variable-show</h2>
+
+
+<pre data-ref="tag">
+<span class="_project-show">project 값 보임</span>
+<span class="_nullVal-show">null 숨김</span>
+<span class="_emptyVal-show">"" 숨김</span>
+<span class="_undefVal-show">undefined 숨김</span>
+<span class="_zeroVal-show">0 숨김</span>
+<span class="_oneVal-show">1 보임</span>
+<span class="_trueVal-show">true 보임</span>
+<span class="_falseVal-show">false 숨김</span>
+
+<span class="_nullStr-show">"null" 숨김</span>
+<span class="_undefStr-show">"undefined" 숨김</span>
+<span class="_zeroStr-show">"0" 숨김</span>
+<span class="_oneStr-show">"1" 보임</span>
+<span class="_trueStr-show">"true" 보임</span>
+<span class="_falseStr-show">"false" 숨김</span>
+</pre>
+
+
+<p class="title">[Before]</p>
+<div class="code" data-ref="before"></div>
+
+<p class="title">[After]</p>
+<div class="code" data-ref="after"></div>
+<!-- /section --></div>
+
+
+
+
+<div class="section"><!-- section -->
+<h2 data-ref="title">_variable-class</h2>
+
+
+<pre data-ref="tag">
+<span class="_project-setClass">project class 추가</span>
+<span class="_nullVal-setClass nullVal">nullVal class 삭제</span>
+<span class="_emptyVal-setClass emptyVal">emptyVal class 삭제</span>
+<span class="_undefVal-setClass undefVal">undefVal class 삭제</span>
+<span class="_zeroVal-setClass zeroVal">zeroVal class 삭제</span>
+<span class="_oneVal-setClass">oneVal class 추가</span>
+<span class="_trueVal-setClass">trueVal class 추가</span>
+<span class="_falseVal-setClass falseVal">falseVal class 삭제</span>
+
+<span class="_nullStr-setClass nullStr">nullStr class 삭제</span>
+<span class="_undefStr-setClass undefStr">undefStr class 삭제</span>
+<span class="_zeroStr-setClass zeroStr">zeroStr class 삭제</span>
+<span class="_oneStr-setClass">oneStr class 추가</span>
+<span class="_trueStr-setClass">trueStr class 추가</span>
+<span class="_falseStr-setClass falseStr">falseStr class 삭제</span>
+
+<span class="_project-addClass">project value 값을 class 추가</span>
+<span class="_project-removeClass TagWire">project value 값과 동일한 class 삭제</span>
+</pre>
+
+
+<p class="title">[Before]</p>
+<div class="code" data-ref="before"></div>
+
+<p class="title">[After]</p>
+<div class="code" data-ref="after"></div>
+<!-- /section --></div>
+
+
+
+
+</div>
+<!-- /testcode -->
+
+</div>
+<!-- /contents -->
+<div id="footer">(c)2015 COXCORE.COM</div>
+</div>
+
+
+
+<script type="text/javascript" src="cox.syntaxHL.js"></script>
+<script type="text/javascript" src="test.Data.js"></script>
+<script type="text/javascript" src="test.TagWire.js"></script>
+<script type="text/javascript">
+
+    // dataset
+    var json = {
+
+        "package": {
+
+            "project": "TagWire",
+            "language": "javascript",
+            "description": "This library helps you on the data binds between Javascript object and HTML tags.",
+            "logo": "https://raw.githubusercontent.com/coxcore/cox-tagwire/master/src/img/tagwire_logo.png",
+            "version": "1.0.3",
+            "since": '2012.09',
+            "update": '2015.07.17',
+            "license": "MIT",
+            "group": "COXCORE",
+            "website": "http://coxcore.com",
+
+            "shortStr": "TagWire",
+            "middleStr": "This library helps you on the data binds between Javascript object and HTML tags.",
+            "longStr": "This library helps you on the data binds between Javascript object and HTML tags. This library helps you on the data binds between Javascript object and HTML tags. This library helps you on the data binds between Javascript object and HTML tags. This library helps you on the data binds between Javascript object and HTML tags.",
+            "htmlStr": "<strong>User Name</strong> : Park U-yeong<br />\n<strong>User ID</strong> : cox.ascript",
+
+            "spacialChar": "`~!@#$%^&*()-_=+\\|]}[{'\";:/?.>,<",
+
+            "photo": "https://raw.githubusercontent.com/coxcore/cox-tagwire/master/src/img/tagwire_logo.png",
+            "website": "http://coxcore.com",
+            "update": '2015.07.17',
+
+            "nullVal": null,
+            "emptyVal": "",
+            "undefVal": undefined,
+            "zeroVal": 0,
+            "oneVal": 1,
+            "trueVal": true,
+            "falseVal": false,
+
+            "nullStr": "null",
+            "undefStr": "undefined",
+            "zeroStr": "0",
+            "oneStr": "1",
+            "trueStr": "true",
+            "falseStr": "false",
+
+
+            "library": [
+                {
+                    "file": "cox.tagwire.js",
+                    "path": "../js/cox.tagwire.js"
+                },
+                {
+                    "file": "cox.tagwire.min.js",
+                    "path": "../js/cox.tagwire.min.js"
+                }
+            ],
+
+            "members" : [
+                {
+                    "coxid": "cox.ascript",
+                    "name": "Park U-yeong",
+                    "email": "ascript0@gmail.com"
+                }
+            ],
+
+            "homepage" : [
+                {
+                    "site" : "Homepage",
+                    "url" : "http://coxcore.com/tagwire/"
+                },
+                {
+                    "site" : "Documentation",
+                    "url" : "http://coxcore.com/tagwire/doc/"
+                },
+                {
+                    "site" : "GitHub",
+                    "url" : "https://github.com/coxcore/cox-tagwire#readme"
+                }
+            ]
+
+        }
+
+    };
+
+
+    var tagwireTest = {
+        complete: function() {
+            TagWire.render(document.getElementById('result'), testResult);
+        }
+    };
+
+    // render data
+    /*
+    if (TagWire.plugin('jQuery')) {
+        console.log('## jQuery Plugin Mode');
+        $('body').render(json, tagwireTest);
+    } else {
+        console.log('## TagWire Native Mode');
+        TagWire.render(document.body, json, tagwireTest);
+    }
+    */
+    TagWire.render(document.body, json, tagwireTest);
+
+</script>
+
+</body>
+</html>
+
