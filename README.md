@@ -17,6 +17,7 @@ class="_{variable name}-{tail function}"
 
 추가정보
 * Documentation : http://coxcore.com/tagwire/doc/
+* Download : https://github.com/coxcore/cox-tagwire/releases
 
 ## How to Use?
 
