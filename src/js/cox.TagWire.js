@@ -665,10 +665,6 @@ cox.TagWire = (function() {
             te,
             s;
 
-        if (c === G) {
-            t = document.body;
-        }
-
         if (itm || applyEvent(t, o, c, dt, EV.ready) !== false) {
             for (s in o) {
                 if (o.hasOwnProperty(s) && s !== G) {
@@ -697,11 +693,11 @@ cox.TagWire = (function() {
         vo = o.global;
 
         if (vo) {
-            if (applyEvent(document.body, vo, G, dt, EV.ready) !== false) {
-                render(document.body, vo, G, ct, dt); // render global object
+            if (applyEvent(t, vo, G, dt, EV.ready) !== false) {
+                render(t, vo, G, ct, dt); // render global object
             }
 
-            applyFinish(document.body, vo, G, dt);
+            applyFinish(t, vo, G, dt);
         }
     }
 
@@ -1047,8 +1043,6 @@ cox.TagWire = (function() {
                 os,
                 oo;
 
-            initTmp();
-
             if (rxl > 500) {
                 rxl = 0;
                 rx = {};
@@ -1059,6 +1053,8 @@ cox.TagWire = (function() {
             if (!t || t.length === 0 || (!c && (!o || !otp))) {
                 return;
             }
+
+            each(t, initTmp);
 
             asc = false;
             op = {
@@ -1103,10 +1099,6 @@ cox.TagWire = (function() {
                     break;
 
                 default :
-            }
-
-            if (c === G) {
-                t = document.body;
             }
 
             if (!otp || c !== A.rndr) {

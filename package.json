@@ -2,7 +2,7 @@
   "name": "TagWire",
   "description": "This library helps you on the data binds between Javascript object and HTML tags.",
   "logo": "https://raw.githubusercontent.com/coxcore/cox-tagwire/master/src/img/tagwire_logo.png",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "since": "2012.09",
   "namespace": "cox",
   "language": "javascript",
