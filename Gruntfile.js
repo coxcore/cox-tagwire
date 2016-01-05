@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 
         banner: [
             '/*!',
-            ' *  <%= pkg.name %> <%= pkg.version %> - coxcore.com',
+            ' *  TagWire <%= pkg.version %> - coxcore.com',
             ' *',
             ' *  <%= pkg.description %>',
             ' *',
