@@ -703,17 +703,24 @@ cox.TagWire = (function() {
 
     function applyValue(t, v, c, ct, dt, slf) {
         var te = t,
+            tv,
             f = function(s, fs) {
                 if (RE.hyp.test(fs) || isSG) {
                     fcall(te, v, c, fs, ct, dt);
                 } else {
+                    tv = v;
                     (T + fs).replace(RE.tail, ff);
                 }
 
                 return s;
             },
             ff = function(fss) {
-                fcall(te, v, c, fss.substr(1), ct, dt);
+                var tmp = fcall(te, tv, c, fss.substr(1), null, dt);
+
+                if (tmp !== undefined) {
+                    tv = tmp;
+                }
+
                 return '';
             };
 
