@@ -97,11 +97,11 @@ window.testUtils = {
             replace(/&gt;/g, '>').
             replace(/&amp;/g, '&').
             replace(/<br[^>]*>/gi, '').
-            replace(/<[^>]*$/, '').
+            //replace(/<[^>]*$/, '').
             replace(/\n|\r/g, '');
         data = data.toLowerCase().
             replace(/<br[^>]*>/gi, '').
-            replace(/<[^>]*$/, '').
+            //replace(/<[^>]*$/, '').
             replace(/\n|\r/g, '');
 
         if (val !== data) {
