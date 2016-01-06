@@ -90,6 +90,27 @@ module.exports = function(grunt) {
                 ],
 
                 dest: '<%= dir.dist %>js/cox.tagwire.js'
+            },
+
+            doc: {
+                options: {
+                    banner: '',
+
+                    separator: '',
+
+                    footer: '',
+
+                    stripBanners: {
+                        block: false,
+                        line: false
+                    },
+
+                    process: function(src, path) {
+                        return src.replace(/([\/#])\d+\.\d+\.\d+/mg, '$1' + pkg.version);
+                    }
+                },
+                src: 'README.md',
+                dest: 'README.md'
             }
         },
 
@@ -134,6 +155,13 @@ module.exports = function(grunt) {
         clean: ['<%= dir.dist %>**'],
 
         copy: {
+            json: {
+                expand: true,
+                flatten: true,
+                filter: 'isFile',
+                src: 'package.json',
+                dest: '<%= dir.release %>'
+            },
             main: {
                 expand: true,
                 flatten: true,

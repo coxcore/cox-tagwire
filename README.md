@@ -21,14 +21,30 @@ class="_{variable name}-{tail function}"
 
 ## How to Use?
 
-먼저, 처리하고자 하는 값들의 `dataset`을 정의합니다. Javascript object로 변환할 수 있으면 어떤 것이든 상관 없습니다.
+#### Download
+* https://github.com/coxcore/cox-tagwire/archive/1.0.5.zip
+* https://github.com/coxcore/cox-tagwire/archive/1.0.5.tar.gz
+
+#### NPM
+```
+npm install coxcore/cox-tagwire#1.0.5
+```
+
+#### CDN
+```html
+<script src="https://cdn.rawgit.com/coxcore/cox-tagwire/1.0.5/js/cox.tagwire.min.js"></script>
+```
+
+`cox.tagwire.min.js`를 페이지에 include 합니다.
+
+그리고, 처리 할 `dataset`을 정의합니다. Javascript object로 변환할 수 있으면 어떤 것이든 상관 없습니다.
 
 ```javascript
 // define dataset
 var data = {
-	siteUrl : 'http://coxcore.com/tagwire',
-	siteName : 'TagWire',
-	imgPath : '/img/tagwire.png'
+    siteUrl : 'http://coxcore.com/tagwire',
+    siteName : 'TagWire',
+    imgPath : '/img/tagwire.png'
 };
 ```
 
@@ -125,42 +141,7 @@ jQuery('target selector').loadAndRender('url' or {ajax options}, {tagwire option
 
 ### Data Binding
 
-***`[Native Code]`***
-```html
-<h1></h1>
-<a id="sampleLink" href="#">
-    <img id="sampleImg" src="" alt="" />
-</a>
-
-
-<script type="text/javascript">
-    var data = {
-    	siteUrl : 'http://coxcore.com/tagwire',
-    	siteName : 'TagWire',
-    	imgPath : '/img/tagwire.png'
-    };
-    
-    var h1 = document.getElementsByTagName('h1');
-    var a = document.getElementById('sampleLink');
-    var img = document.getElementById('sampleImg');
-    
-    // apply 'data'
-    h1.innerHTML = data.siteName;
-    a.setAttribute('href', data.siteUrl);
-    img.setAttribute('src', data.imgPath);
-    img.setAttribute('alt', data.siteName);
-</script>
-```
-
-***`[Result]`***
-```html
-<h1>TagWire</h1>
-<a id="sampleLink" href="http://coxcore.com/tagwire">
-    <img id="sampleImg" src="/img/tagwire.png" alt="TagWire" />
-</a>
-```
-
-***`[TagWire]`***
+***`[Code]`***
 ```html
 <h1 class="_siteName-text"></h1>
 <a class="_siteUrl-href" href="#">
@@ -170,9 +151,9 @@ jQuery('target selector').loadAndRender('url' or {ajax options}, {tagwire option
 
 <script type="text/javascript">
     var data = {
-    	siteUrl : 'http://coxcore.com/tagwire',
-    	siteName : 'TagWire',
-    	imgPath : '/img/tagwire.png'
+        siteUrl : 'http://coxcore.com/tagwire',
+        siteName : 'TagWire',
+        imgPath : '/img/tagwire.png'
     };
 
     // apply 'data'
@@ -191,7 +172,7 @@ jQuery('target selector').loadAndRender('url' or {ajax options}, {tagwire option
 
 ### Object Binding
 
-***`[TagWire]`***
+***`[Code]`***
 ```html
 <div class="_headerData">
     <p class="_title-text"></p>
@@ -207,15 +188,15 @@ jQuery('target selector').loadAndRender('url' or {ajax options}, {tagwire option
 
 <script type="text/javascript">
     var data = {
-    	headerData : {
-    	    title : 'Header Title.'
-    	},
-    	footerData : {
-    	    title : 'Footer Title.',
-    	    contentData : {
-    	        description : 'Footer Description.<br />TagWire Sample'
-    	    }
-    	},
+        headerData : {
+            title : 'Header Title.'
+        },
+        footerData : {
+            title : 'Footer Title.',
+            contentData : {
+                description : 'Footer Description.<br />TagWire Sample'
+            }
+        },
     };
 
     // apply 'data'
@@ -239,7 +220,7 @@ jQuery('target selector').loadAndRender('url' or {ajax options}, {tagwire option
 
 ### Array Binding
 
-***`[TagWire]`***
+***`[Code]`***
 ```html
 <div class="_arrData _array">
     <p class="_arrData-1-text"></p>
@@ -250,7 +231,7 @@ jQuery('target selector').loadAndRender('url' or {ajax options}, {tagwire option
 
 <script type="text/javascript">
     var data = {
-    	arrData : ['a', 'b', 'c']
+        arrData : ['a', 'b', 'c']
     };
 
     // apply 'data'
@@ -269,7 +250,7 @@ jQuery('target selector').loadAndRender('url' or {ajax options}, {tagwire option
 
 ### Build List
 
-***`[TagWire]`***
+***`[Code]`***
 ```html
 <div class="_arrData1 _arrData2">
     <ul class="_arrData1-list">
@@ -285,11 +266,11 @@ jQuery('target selector').loadAndRender('url' or {ajax options}, {tagwire option
 
 <script type="text/javascript">
     var data = {
-    	arrData1 : ['a', 'b', 'c'],
-    	arrData2 : [
-    	    { index : 11, description : 'about 11' },
-    	    { index : 12, description : 'about 12' }
-    	]
+        arrData1 : ['a', 'b', 'c'],
+        arrData2 : [
+            { index : 11, description : 'about 11' },
+            { index : 12, description : 'about 12' }
+        ]
     };
 
     // apply 'data'
