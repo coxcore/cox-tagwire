@@ -1,5 +1,5 @@
 {
-  "name": "cox-tagwire",
+  "name": "coxcore-tagwire",
   "description": "This library helps you on the data binds between Javascript object and HTML tags.",
   "logo": "https://raw.githubusercontent.com/coxcore/cox-tagwire/master/src/img/tagwire_logo.png",
   "version": "1.0.5",
